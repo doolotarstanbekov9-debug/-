@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Mini MarketPlace</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #f5f5f5;
+    }
+
+    header {
+      background: #222;
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+      font-size: 24px;
+    }
+
+    .container {
+      display: flex;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    .products {
+      width: 70%;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .product {
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .product img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .product h3 {
+      margin: 10px 0 5px;
+    }
+
+    .product p {
+      color: #555;
+      margin: 5px 0;
+    }
+
+    .product button {
+      margin-top: 10px;
+      padding: 10px;
+      width: 100%;
+      background: #28a745;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .product button:hover {
+      background: #218838;
+    }
+
+    .cart {
+      width: 30%;
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .cart h2 {
+      margin-top: 0;
+      text-align: center;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 5px;
+    }
+
+    .cart-item button {
+      background: red;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      padding: 3px 6px;
+      border-radius: 4px;
+    }
+
+    .total {
+      font-weight: bold;
+      text-align: center;
+      margin-top: 15px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>🛒 Mini MarketPlace</header>
+
+<div class="container">
+  <div class="products" id="products"></div>
+
+  <div class="cart">
+    <h2>Корзина</h2>
+    <div id="cartItems"></div>
+    <div class="total">Итого: <span id="total">0</span> ₽</div>
+  </div>
+</div>
+
+<script>
+  const products = [
+    { id: 1, name: "Смартфон", price: 25000, img: "https://picsum.photos/300/200?1" },
+    { id: 2, name: "Ноутбук", price: 65000, img: "https://picsum.photos/300/200?2" },
+    { id: 3, name: "Наушники", price: 4500, img: "https://picsum.photos/300/200?3" },
+    { id: 4, name: "Часы", price: 8000, img: "https://picsum.photos/300/200?4" },
+    { id: 5, name: "Клавиатура", price: 3000, img: "https://picsum.photos/300/200?5" },
+    { id: 6, name: "Мышь", price: 1500, img: "https://picsum.photos/300/200?6" }
+  ];
+
+  const cart = [];
+
+  const productsDiv = document.getElementById("products");
+  const cartItemsDiv = document.getElementById("cartItems");
+  const totalSpan = document.getElementById("total");
+
+  function renderProducts() {
+    productsDiv.innerHTML = "";
+    products.forEach(p => {
+      productsDiv.innerHTML += `
+        <div class="product">
+          <img src="${p.img}">
+          <h3>${p.name}</h3>
+          <p>${p.price} ₽</p>
+          <button onclick="addToCart(${p.id})">Добавить</button>
+        </div>
+      `;
+    });
+  }
+
+  function addToCart(id) {
+    const product = products.find(p => p.id === id);
+    cart.push(product);
+    renderCart();
+  }
+
+  function removeFromCart(index) {
+    cart.splice(index, 1);
+    renderCart();
+  }
+
+  function renderCart() {
+    cartItemsDiv.innerHTML = "";
+    let total = 0;
+
+    cart.forEach((item, index) => {
+      total += item.price;
+      cartItemsDiv.innerHTML += `
+        <div class="cart-item">
+          <span>${item.name} - ${item.price} ₽</span>
+          <button onclick="removeFromCart(${index})">×</button>
+        </div>
+      `;
+    });
+
+    totalSpan.textContent = total;
+  }
+
+  renderProducts();
+</script>
+
+</body>
+</html>
